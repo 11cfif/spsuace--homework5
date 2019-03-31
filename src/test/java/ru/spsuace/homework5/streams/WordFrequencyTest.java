@@ -13,7 +13,7 @@ public class WordFrequencyTest {
     @Test
     public void simple() {
         Stream<String> innerStream = Arrays.stream(new String[]{"Мама мыла мыла мыла раму!"});
-        List<String> expected = Arrays.asList("мыла", "маму", "раму!");
+        List<String> expected = Arrays.asList("мыла", "мама", "раму");
         List<String> actual = WordFrequency.wordFrequency(innerStream);
         assertEquals(expected, actual);
     }

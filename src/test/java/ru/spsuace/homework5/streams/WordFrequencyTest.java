@@ -31,4 +31,13 @@ public class WordFrequencyTest {
         List<String> actual = WordFrequency.wordFrequency(innerStream);
         assertEquals(expected, actual);
     }
+
+    @Test
+    public void Oops() {
+        Stream<String> innerStream = Arrays.stream(new String[]{
+                "Шел я шел,а потом еще шел,и наконец,дошел"});
+        List<String> expected = Arrays.asList("шел", "а", "дошел", "еще", "и", "наконец", "потом", "я");
+        List<String> actual = WordFrequency.wordFrequency(innerStream);
+        assertEquals(expected, actual);
+    }
 }

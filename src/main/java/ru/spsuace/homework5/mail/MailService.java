@@ -1,9 +1,11 @@
 package ru.spsuace.homework5.mail;
 
 
-import java.util.List;
-import java.util.Map;
+import javafx.concurrent.Service;
+
+import java.util.*;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 /**
  * Нужно создать сервис, который умеет обрабатывать обрабатывать письма и зарплату.
@@ -14,22 +16,31 @@ import java.util.function.Consumer;
  *
  * Оценка за задание 4 балла (еще 2 балла можно получить дополнительно)
  */
-public class MailService implements Consumer {
+public class MailService<T> implements Consumer<Message<T>> {
 
     /**
      * С помощью этого метода почтовый сервис обрабатывает письма и зарплаты
      * 1 балл
      */
-    @Override
-    public void accept(Object o) {
+    private List<Message<T>> Messages = new ArrayList<Message<T>>();
 
+    @Override
+    public void accept(Message<T> message) {
+        Messages.add(message);
     }
 
     /**
      * Метод возвращает мапу получатель -> все объекты которые пришли к этому получателю через данный почтовый сервис
      */
-    public Map<String, List> getMailBox() {
-        return null;
+    public Map<String, List<T>> getMailBox() {
+        return Messages.stream().collect(Collectors.toMap(
+                message -> message.getReceiver(),
+                message -> Arrays.asList(message.getMessageBody()),
+                (existing, replacement) -> {
+                    existing.addAll(replacement);
+                    return existing;
+                }
+        ));
     }
 
 
@@ -37,7 +48,8 @@ public class MailService implements Consumer {
      * Метод должен заставить обработать service все mails.
      * 1 балл за любое решение (2 балла за красивое)
      */
-    public static void process(MailService service, List mails) {
-
+    public static void process(MailService service, List<Message> mails) {
+        mails.stream().forEach(mail -> service.accept(mail));
     }
+
 }

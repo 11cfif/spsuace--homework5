@@ -1,9 +1,8 @@
 package ru.spsuace.homework5.streams;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.lang.reflect.Array;
+import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -27,20 +26,15 @@ public class WordFrequency {
      * Без них - 4 балла
      */
     public static List<String> wordFrequency(Stream<String> lines) {
-        List<String> list = lines
+        return lines
                 .map(line -> line.split("\\W+"))
                 .flatMap(arr -> Stream.of(arr))
                 .map(w -> w.toLowerCase())
-                .collect(Collectors.toList());
-
-        List<String> copy = new ArrayList<>(list);
-
-        return list
-                .stream()
-                .distinct()
-                .sorted((w1, w2) -> (int)copy.stream().filter(w -> w.equals(w2)).count()
-                        - (int)copy.stream().filter(w -> w.equals(w1)).count())
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet().stream()
+                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
                 .limit(10)
+                .map(key -> key.getKey())
                 .collect(Collectors.toList());
     }
 

@@ -1,9 +1,9 @@
 package ru.spsuace.homework5.mail;
 
 public class Message<T> {
-    private String Sender;
-    private String Receiver;
-    private T MessageBody;
+    private final String Sender;
+    private final String Receiver;
+    private final T MessageBody;
 
 
     public String getSender() {

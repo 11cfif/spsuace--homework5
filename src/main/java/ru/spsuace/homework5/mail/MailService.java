@@ -16,16 +16,26 @@ import java.util.stream.Collectors;
  *
  * Оценка за задание 4 балла (еще 2 балла можно получить дополнительно)
  */
-public class MailService<T> implements Consumer<Message<T>> {
+public class MailService<T extends MailMessage> implements Consumer<Message<T>> {
 
     /**
      * С помощью этого метода почтовый сервис обрабатывает письма и зарплаты
      * 1 балл
      */
     private List<Message<T>> Messages = new ArrayList<Message<T>>();
+    private Map<String, List<T>> MailBox = new HashMap<>();
+
 
     @Override
     public void accept(Message<T> message) {
+        List<T> mails = MailBox.get(message.getReceiver());
+        if (mails == null) {
+            List<T> list = new ArrayList<>();
+            list.add(message.getMessageBody());
+            MailBox.put(message.getReceiver(), list);
+        } else {
+            mails.add(message.getMessageBody());
+        }
         Messages.add(message);
     }
 
@@ -33,14 +43,7 @@ public class MailService<T> implements Consumer<Message<T>> {
      * Метод возвращает мапу получатель -> все объекты которые пришли к этому получателю через данный почтовый сервис
      */
     public Map<String, List<T>> getMailBox() {
-        return Messages.stream().collect(Collectors.toMap(
-                message -> message.getReceiver(),
-                message -> Arrays.asList(message.getMessageBody()),
-                (existing, replacement) -> {
-                    existing.addAll(replacement);
-                    return existing;
-                }
-        ));
+        return MailBox;
     }
 
 

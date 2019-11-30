@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
  *
  * Оценка за задание 4 балла (еще 2 балла можно получить дополнительно)
  */
-public class MailService<T extends MailMessage> implements Consumer<Message<T>> {
+public class MailService<T extends Message> implements Consumer<Message<T>> {
 
     /**
      * С помощью этого метода почтовый сервис обрабатывает письма и зарплаты

@@ -1,6 +1,10 @@
 package ru.spsuace.homework5.streams;
 
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -22,7 +26,17 @@ public class WordFrequency {
      * Без них - 4 балла
      */
     public static List<String> wordFrequency(Stream<String> lines) {
-        return null;
+        return lines.map(w -> w.replaceAll("\\p{Punct}", " "))
+                .map(w -> w.split("\\s+"))
+                .flatMap(Arrays::stream)
+                .map(String::toLowerCase)
+                .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
+                .entrySet()
+                .stream()
+                .sorted(Map.Entry.<String, Long>comparingByValue().reversed().thenComparing(Map.Entry.comparingByKey()))
+                .limit(10)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
 

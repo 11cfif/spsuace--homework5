@@ -32,7 +32,7 @@ public class WordFrequency {
                 .map(w -> w.toLowerCase())
                 .collect(Collectors.groupingBy(Function.identity(), Collectors.counting()))
                 .entrySet().stream()
-                .sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+                .sorted(Map.Entry.<String, Long>comparingByValue(Comparator.reverseOrder()).thenComparing(Map.Entry.comparingByKey()))
                 .limit(10)
                 .map(key -> key.getKey())
                 .collect(Collectors.toList());
